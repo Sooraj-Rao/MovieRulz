@@ -1,0 +1,108 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&family=Poppins:wght@500&display=swap');
+
+
+.Poppins {
+  font-family: 'Poppins';
+}
+
+.Mont {
+  font-family: Montserrat;
+
+}
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body::-webkit-scrollbar,
+.detail::-webkit-scrollbar {
+  display: none;
+}
+
+.text {
+  line-height: 30px;
+  font-family: Montserrat;
+}
+
+.Login {
+  font-family: Montserrat;
+  margin: 20px auto;
+  width: 30vw;
+  height: 60vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid grey;
+  border-radius: 10px;
+}
+
+.SignUp {
+  font-family: Montserrat;
+  margin: 20px auto;
+  width: 30vw;
+  height: 70vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid grey;
+  border-radius: 10px;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.AddForm {
+  font-family: Montserrat;
+  margin: auto;
+  width: 60vw;
+  height: 620px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.textarea {
+  width: 62%;
+}
+
+
+
+@media screen and (max-width:567px) {
+  .Login {
+    width: 90%;
+    height: 400px;
+  }
+
+  .detail {
+    height: 100%;
+  }
+
+  .AddForm {
+    width: 100%;
+    height: 600px;
+  }
+
+  .textarea {
+    width: 100%;
+  }
+
+  .SignUp {
+    width: 90%;
+    height: 500px;
+  }
+}
