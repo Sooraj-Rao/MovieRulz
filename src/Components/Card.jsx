@@ -6,9 +6,11 @@ import { moviesRef } from "./Firebase/Firebase";
 import { Link } from "react-router-dom";
 import { HomeCard } from "./Animate/HomeCard";
 
+
 const Card = () => {
   const [data, setData] = useState([]);
   const [load, setLoad] = useState(false);
+
 
   useEffect(() => {
     async function getData() {
@@ -25,6 +27,8 @@ const Card = () => {
     }
     getData();
   }, [])
+
+
   return (
     <div className=" flex h-screen text-center flex-wrap justify-center mt-4">
       {load ?
@@ -53,6 +57,7 @@ const Card = () => {
           );
         })
       }
+
     </div>
   );
 };

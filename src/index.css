@@ -36,17 +36,6 @@ body::-webkit-scrollbar,
   font-family: Montserrat;
 }
 
-.Login {
-  font-family: Montserrat;
-  margin: 20px auto;
-  width: 30vw;
-  height: 60vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  border: 1px solid grey;
-  border-radius: 10px;
-}
 
 .SignUp {
   font-family: Montserrat;
@@ -83,10 +72,6 @@ input::-webkit-inner-spin-button {
 
 
 @media screen and (max-width:567px) {
-  .Login {
-    width: 90%;
-    height: 400px;
-  }
 
   .detail {
     height: 100%;

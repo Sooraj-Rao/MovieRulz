@@ -7,8 +7,9 @@ import swal from 'sweetalert';
 import { Appstate } from '../App';
 import { useNavigate } from 'react-router-dom';
 import { ReviewAnim } from './Animate/DatailAnim';
+import { failMessage } from './Constants';
 
-const Review = ({ id, Reviews, prevRating, userRated, load }) => {
+const Review = ({ id, Reviews, prevRating, userRated }) => {
   const useAppState = useContext(Appstate);
   const navigate = useNavigate();
 
@@ -19,7 +20,9 @@ const Review = ({ id, Reviews, prevRating, userRated, load }) => {
 
   const sendReview = async () => {
     if (rating == 0) {
-      return
+      return failMessage('Rating cannot be 0 stars!')
+    } else if (input.length < 20) {
+      return failMessage('Review is too short!')
     }
     try {
       if (useAppState.login) {
@@ -37,42 +40,38 @@ const Review = ({ id, Reviews, prevRating, userRated, load }) => {
           rating: prevRating + rating,
           rated: userRated + 1
         })
-
         setLoader(false)
         setinput('');
       } else {
         navigate('/Login')
       }
     } catch (error) {
-      swal({
-        title: error.message,
-        icon: "error",
-        buttons: false,
-        timer: 3000
-      })
+      return failMessage('Unable to add Review!')
     }
   }
 
 
-  console.log(load);
   return (
     <div className='flex flex-col border-t'>
+      <span className=' font-semibold text-blue-800'>Share your review now!</span>
       <span className=' flex items-center gap-4'>
-      <ReactStars
-        size={30}
-        half={true}
-        value={rating}
-        edit={true}
-        onChange={(e) => setRating(e)}
-      />
-      <span className=' pt-1'>{rating}/5</span>
+        <ReactStars
+          size={30}
+          half={true}
+          value={rating}
+          edit={true}
+          onChange={(e) => setRating(e)}
+        />
+        <span className=' pt-1'>{rating}/5</span>
       </span>
-      <input type="text" placeholder='Share your thoughts..' className='rounded outline-none  focus:border-blue-400 focus:border-2 border-2 pl-2 h-10 my-2 text-black'
+      <textarea type="text" placeholder='Share your thoughts..' className='rounded outline-none  focus:border-blue-400 focus:border-2 border-2 pl-2 h-20 resize-none my-2 text-black'
         value={input}
         onChange={(e) => setinput(e.target.value)}
       />
-      <button onClick={sendReview} className=' h-10 bg-blue-700 text-white Poppins  rounded'> Post Review
-      </button>
+      <div className=' flex justify-center'>
+        <button onClick={sendReview} className='  h-10 bg-blue-700 text-white Poppins  rounded w-1/2'> Post Review
+        </button>
+      </div>
       {
         loader ? <ReviewAnim /> :
           <div>
@@ -87,14 +86,14 @@ const Review = ({ id, Reviews, prevRating, userRated, load }) => {
                       </div>
                       <div>
                         <span className=' flex items-center gap-4'>
-                        <ReactStars
-                          size={16}
-                          half={true}
-                          value={e.rating}
-                          edit={false}
+                          <ReactStars
+                            size={16}
+                            half={true}
+                            value={e.rating}
+                            edit={false}
                           />
-                        <span className=' font-semibold text-blue-800'>{e.rating}/5 </span>
-                          </span>
+                          <span className=' font-semibold text-blue-800'>{e.rating}/5 </span>
+                        </span>
                         <h3>{e.thought}</h3>
                       </div>
                     </div>

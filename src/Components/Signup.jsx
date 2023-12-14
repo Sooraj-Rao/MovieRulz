@@ -12,16 +12,18 @@ import { useNavigate } from "react-router-dom";
 import app from "./Firebase/Firebase";
 import swal from "sweetalert";
 import { addDoc } from "firebase/firestore";
+import { PasswordSVG, PhoneSVG, UserSVG } from "./SVG/Svg";
 
 const auth = getAuth(app);
 
 const SignUp = () => {
-  const navigate=useNavigate();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [form, setForm] = useState({
+  const [Input, setInput] = useState({
     name: "",
     mobile: "",
     password: "",
+    confirmPass: ''
   });
   const [otpSent, setOtpSent] = useState(false);
   const [OTP, setOTP] = useState("");
@@ -38,15 +40,10 @@ const SignUp = () => {
     setLoading(true);
     generateRecaptha();
     let appVerifier = window.recaptchaVerifier;
-    signInWithPhoneNumber(auth, `+91${form.mobile}`, appVerifier)
+    signInWithPhoneNumber(auth, `+91${Input.mobile}`, appVerifier)
       .then((confirmationResult) => {
         window.confirmationResult = confirmationResult;
-        swal({
-          text: "OTP sent",
-          icon: "success",
-          buttons: false,
-          timer: 3000,
-        });
+        console.log('OTP sent');
         setOtpSent(true);
         setLoading(false);
       })
@@ -55,138 +52,137 @@ const SignUp = () => {
       });
   };
 
-const verifyOtp=()=>{
-try {
-  setLoading(true);
-  window.confirmationResult.confirm(OTP).then((result)=>{
-     uploadData();
-    swal({
-      text:"Sucessfully registered",
-      icon:"success",
-      buttons:false,
-      timer:3000
-    })
-    navigate('/Login')
-    setLoading(false);
-  })
-} catch (error) {
-  console.log(error);
-}
-}
+  const verifyOtp = () => {
+    try {
+      setLoading(true);
+      window.confirmationResult.confirm(OTP).then((result) => {
+        uploadData();
+        console.log('Registerd');
+        navigate('/Login')
+        setLoading(false);
+      })
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
-const uploadData=async()=>{
- try {
-   const salt=bcrypt.genSaltSync(10);
-   let hash=bcrypt.hashSync(form.password,salt)
-   await addDoc(usersRef,{
-   name:form.name,
-   password:hash,
-   mobile:form.mobile
- })  
- } catch (error) {
-  console.log(error);
- }
-}
+  const uploadData = async () => {
+    try {
+      const salt = bcrypt.genSaltSync(10);
+      let hash = bcrypt.hashSync(Input.password, salt)
+      await addDoc(usersRef, {
+        name: Input.name,
+        password: hash,
+        mobile: Input.mobile
+      })
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+
+  const handleChange = (e) => {
+    let name = e.target.name;
+    let value = e.target.value;
+    setInput({ ...Input, [name]: value })
+  }
 
   return (
     <>
+     
       {otpSent ? (
-        <div className="flex w-full justify-center items-center md:min-h-fit mt-6">
-          <div className="h-full md:w-1/5 w-9/12 border border-gray-500 rounded-lg pt-10 p-8">
-            <h1 className="md:pb-16 pb-10 md:text-2xl text-xl text-center">
-              OTP Authentication
-            </h1>
-            <div className=" flex flex-col h-24 items-center justify-center">
-            <p>Enter OTP</p>
-            <br />
-            <input
-              required
-              className="text-center h-12 pl-2 text-xl font-bold md:w-1/2 w-3/5  bg-slate-900  outline-none  rounded"
-              value={OTP}
-              onChange={(e) => setOTP(e.target.value)}
-            />
-            </div>
-            <div className="md:w-1/2 w-1/2  mx-auto mt-5 ">
-              <button onClick={verifyOtp} className="rounded w-full my-2 text-xl h-11 bg-blue-950">
-                {loading ? (
-                  <span className="flex justify-center">
-                    {" "}
-                    <TailSpin height={25} color="white" />
-                  </span>
-                ) : (
-                  "Confirm"
-                )}
-              </button>
+        <div className=" h-[calc(100vh-5rem)] bg-slate-300">
+          <div className="flex w-full justify-center items-center md:min-h-fit pt-10  ">
+            <div className="h-full md:w-2/6 w-9/12 border border-gray-500  rounded-lg pt-10 p-8 shadow-[0px_0px_10px_1px] shadow-slate-400 ">
+              <h1 className="md:pb-16 pb-10 md:text-2xl text-xl text-center">
+                OTP Authentication
+              </h1>
+              <div className=" flex flex-col h-24 text-lg items-center justify-center">
+                <p>Enter  OTP sent to {Input.mobile}</p>
+                <br />
+                <input
+                  required
+                  autoFocus
+                  placeholder="6 digit OTP"
+                  type="number"
+                  className="text-center h-12 pl-2 text-xl font-bold md:w-1/2 w-3/5  bg-slate-200  outline-none  rounded"
+                  value={OTP}
+                  onChange={(e) => setOTP(e.target.value)}
+                />
+              </div>
+              <div className="md:w-1/2 w-1/2  mx-auto mt-5 ">
+                <button onClick={verifyOtp} className="rounded w-full my-2 text-xl h-11 text-white bg-blue-600">
+                  {loading ? (
+                    <span className=' flex justify-center'>
+                      <h1 className=' h-5 w-5 border-[3px] rounded-full border-blue-200 border-t-transparent animate-spin '></h1>
+                    </span>
+                  ) : (
+                    "Confirm"
+                  )}
+                </button>
+              </div>
             </div>
           </div>
         </div>
       ) : (
-        <div className="SignUp">
-          <h1 className="text-center text-2xl my-5 font-semibold">Sign Up</h1>
-          <div className="h-30 md:flex md:justify-evenly md:w-2/3 flex flex-col items-center my-3">
-            <div>
-              <p>Name</p>
-              <br />
-              <input
-                required
-                className=" h-12 pl-2 text-xl font-bold  bg-slate-900 -mt-4 mb-2 md:w-96 w-70 outline-none  rounded"
-                value={form.name}
-                onChange={(e) => setForm({ ...form, name: e.target.value })}
-                type="text"
-              />
-            </div>
-            <div>
-              <p>Phone Number</p>
-              <br />
-              <input
-                required
-                className=" h-12 pl-2 text-xl font-bold  bg-slate-900 -mt-4 mb-2 md:w-96 w-70 outline-none  rounded"
-                value={form.mobile}
-                onChange={(e) => setForm({ ...form, mobile: e.target.value })}
-                type="number"
-              />
-            </div>
+        <section className="bg-slate-300">
+          <div className=" container flex items-center justify-center  h-[calc(100vh-5rem)] px-6 mx-auto">
+            <div className="w-full max-w-md shadow-[0px_0px_10px_1px] shadow-slate-400  rounded-md p-4">
+              <h1 className=" text-center text-2xl">New here ? Signin Now </h1>
+              <div className="relative flex items-center mt-8">
+                <span className="absolute">
+                  {UserSVG}
+                </span>
+                <input name="name" value={Input.name} onChange={handleChange} type="text" className="block w-full py-3 text-gray-700 bg-white border rounded-lg px-11  focus:border-blue-400  focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40" placeholder="Username" />
+              </div>
 
-            <div>
-              <p>Password</p>
-              <br />
-              <input
-                required
-                className="  h-12 pl-2 text-xl font-bold  bg-slate-900  -mt-4 mb-2 md:w-96 w-70 outline-none  rounded"
-                value={form.password}
-                onChange={(e) => setForm({ ...form, password: e.target.value })}
-              />
-            </div>
-            <div className="md:w-96 w-60 mt-5 ">
-              <button
-                onClick={requestOtp}
-                className="rounded w-full my-2 text-xl h-11 bg-blue-950"
-              >
-                {loading ? (
-                  <span className="flex justify-center">
-                    {" "}
-                    <TailSpin height={25} color="white" />
-                  </span>
-                ) : (
-                  "Register"
-                )}
-              </button>
-            </div>
-            <div className="mt-3">
-              <h4>
-                Already have an Acoount ?{" "}
-                <Link to={"/Login"}>
-                  <span className=" text-blue-400 font-extrabold cursor-pointer">
-                    {" "}
-                    Login
-                  </span>
-                </Link>
-              </h4>
+              <div className="relative flex items-center mt-6">
+                <span className="absolute">
+                  {PhoneSVG}
+                </span>
+                <input value={Input.mobile} name="mobile" onChange={handleChange} type="number" className="block w-full py-3 text-gray-700 bg-white border rounded-lg px-11  focus:border-blue-400  focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40" placeholder="Phone number" />
+              </div>
+
+              <div className="relative flex items-center mt-4">
+                <span className="absolute">
+                  {PasswordSVG}
+                </span>
+
+                <input value={Input.password} onChange={handleChange} name="password" type="password" className="block w-full px-10 py-3 text-gray-700 bg-white border rounded-lg focus:border-blue-400  focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40" placeholder="Password" />
+              </div>
+
+              <div className="relative flex items-center mt-4">
+                <span className="absolute">
+                  {PasswordSVG}
+                </span>
+
+                <input value={Input.confirmPass} onChange={handleChange} name="confirmPass" type="password" className="block w-full px-10 py-3 text-gray-700 bg-white border rounded-lg  focus:border-blue-400  focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40" placeholder="Confirm Password" />
+              </div>
+
+              <div className="mt-6">
+                <button onClick={requestOtp} className="w-full px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 trans Input bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50">
+                  {
+                    loading ?
+
+                      <span className=' flex justify-center'>
+                        <h1 className=' h-5 w-5 border-[3px] rounded-full border-blue-200 border-t-transparent animate-spin '></h1>
+                      </span>
+                      :
+                      'Signup'
+                  }
+                </button>
+
+                <div className="mt-6 text-center ">
+                  <Link to={'/login'} className=" font-semibold text-sm text-blue-500 hover:underline ">
+                    Already have an account?
+                  </Link>
+                </div>
+              </div>
             </div>
           </div>
-          <div id="recaptcha-container"></div>
-        </div>
+        </section>
       )}
+       <div id="recaptcha-container"></div>
     </>
   );
 };
