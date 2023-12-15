@@ -3,11 +3,12 @@ import ReactStars from "react-stars";
 import { ThreeDots } from "react-loader-spinner";
 import { getDocs } from "firebase/firestore";
 import { moviesRef } from "./Firebase/Firebase";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { HomeCard } from "./Animate/HomeCard";
 
 
 export const Card = () => {
+  const navigate = useNavigate();
   const [data, setData] = useState([])
   const [load, setLoad] = useState(false);
 
@@ -36,7 +37,7 @@ export const Card = () => {
         :
         data?.map((val, i) => {
           return (
-            <Link key={i} to={`/Detail/${val.id}`}>
+            <div key={i} onClick={() => navigate(`/movie/${val.id}`)}>
               <div className="bg-blue-100 group flex justify-center rounded-lg overflow-hidden cursor-pointer text-xl h-[23rem] w-64 m-4  " key={i}>
                 <div className="text-lg font-sans ">
                   <div className=" flex justify-center h-3/4 w-[19rem] overflow-hidden " >
@@ -53,7 +54,7 @@ export const Card = () => {
                   <span>{val.year}</span>
                 </div>
               </div>
-            </Link>
+            </div>
           );
         })
       }

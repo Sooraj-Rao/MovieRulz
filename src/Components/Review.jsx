@@ -62,7 +62,7 @@ const Review = ({ id, Reviews, prevRating, userRated, getReview }) => {
           edit={true}
           onChange={(e) => setRating(e)}
         />
-        <span className=' pt-1'>{rating}/5</span>
+        <span className={`pt-1 ${rating > 0 ? 'block' : 'hidden'}`} >{rating}/5</span>
       </span>
       <textarea type="text" placeholder='Share your thoughts..' className='rounded outline-none  focus:border-blue-400 focus:border-2 border-2 pl-2 h-20 resize-none my-2 text-black'
         value={input}

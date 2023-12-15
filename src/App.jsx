@@ -10,27 +10,32 @@ import { ReactNotifications } from 'react-notifications-component'
 import 'react-notifications-component/dist/theme.css'
 import { MovieContext } from './Components/Context/Context';
 import ViewAll from './Components/ViewAll';
-
+import Users from './Components/Users';
 
 
 function App() {
-
   const context = useContext(MovieContext);
-  const { login, userData } = context;
+
+  const { login, isAdmin } = context;
+
   return (
     <div>
       <ReactNotifications />
       <Header />
       <Routes>
-        <Route path='/' element={<Card  />}></Route>
+        <Route path='/' element={<Card />}></Route>
         {
           login &&
           <>
             <Route path='/addMovie' element={<AddMovie />}></Route>
-            <Route path='/viewAll' element={<ViewAll  />}></Route>
+            <Route path='/viewAll' element={<ViewAll />}></Route>
+            {
+              isAdmin &&
+              <Route path='/users' element={<Users />}></Route>
+            }
           </>
         }
-        <Route path='/detail/:id' element={<Detail />}></Route>
+        <Route path='/movie/:id' element={<Detail />}></Route>
         {
           !login &&
           <>

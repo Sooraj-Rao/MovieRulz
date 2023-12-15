@@ -7,6 +7,10 @@ const Context = ({ children }) => {
   const [cookie, setCookie] = useCookies()
   const [login, setLogin] = useState(() => cookie.login ? true : false);
   const [userData, setUserData] = useState({ name: '', mobile: '' });
+  let isAdmin = false;
+  if (cookie.mobile == import.meta.env.VITE_PHONE) {
+    isAdmin = true
+  }
   useEffect(() => {
     if (login) {
       setUserData({
@@ -16,7 +20,7 @@ const Context = ({ children }) => {
     }
   }, [login])
   return <MovieContext.Provider
-    value={{ login, userData }}
+    value={{ login, userData, isAdmin }}
   >{children}</MovieContext.Provider>;
 };
 

@@ -1,17 +1,17 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore,collection } from "firebase/firestore";
+import { getFirestore, collection } from "firebase/firestore";
 const firebaseConfig = {
-  apiKey: "AIzaSyB4McgMCvQQAKCFbqfaCJeTnLx0HVLBNAk",
-  authDomain: "movierulz-9e8da.firebaseapp.com",
-  projectId: "movierulz-9e8da",
-  storageBucket: "movierulz-9e8da.appspot.com",
-  messagingSenderId: "1005239413386",
-  appId: "1:1005239413386:web:4a9afdcfe7ad6a38cfdb73"
+  apiKey: import.meta.env.VITE_API_KEY,
+  authDomain: import.meta.env.VITE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_MESSAGINGSENDERID,
+  appId: import.meta.env.VITE_APPID
 };
 
 const app = initializeApp(firebaseConfig);
-export const db=getFirestore(app);
-export const moviesRef=collection(db,"Movies")
-export const reviewsRef=collection(db,"reviews")
-export const usersRef=collection(db,"users")
+export const db = getFirestore(app);
+export const moviesRef = collection(db, "Movies")
+export const reviewsRef = collection(db, "reviews")
+export const usersRef = collection(db, "users")
 export default app;
