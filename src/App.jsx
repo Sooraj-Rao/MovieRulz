@@ -1,18 +1,20 @@
 import Header from './Components/Header';
-import Card from './Components/Card';
+import { Card } from './Components/Card';
 import { Routes, Route } from 'react-router-dom';
 import AddMovie from './Components/AddMovie';
 import Detail from './Components/Detail';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import Login from './Components/Login';
 import Signup from './Components/Signup';
 import { ReactNotifications } from 'react-notifications-component'
 import 'react-notifications-component/dist/theme.css'
 import { MovieContext } from './Components/Context/Context';
+import ViewAll from './Components/ViewAll';
 
 
 
 function App() {
+
   const context = useContext(MovieContext);
   const { login, userData } = context;
   return (
@@ -20,10 +22,13 @@ function App() {
       <ReactNotifications />
       <Header />
       <Routes>
-        <Route path='/' element={<Card />}></Route>
+        <Route path='/' element={<Card  />}></Route>
         {
           login &&
-          <Route path='/addMovie' element={<AddMovie />}></Route>
+          <>
+            <Route path='/addMovie' element={<AddMovie />}></Route>
+            <Route path='/viewAll' element={<ViewAll  />}></Route>
+          </>
         }
         <Route path='/detail/:id' element={<Detail />}></Route>
         {
@@ -33,6 +38,7 @@ function App() {
             <Route path='/signUp' element={<Signup />}></Route>
           </>
         }
+        <Route path='/*' element={<Card />}></Route>
       </Routes>
     </div>
   );

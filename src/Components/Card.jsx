@@ -7,30 +7,30 @@ import { Link } from "react-router-dom";
 import { HomeCard } from "./Animate/HomeCard";
 
 
-const Card = () => {
-  const [data, setData] = useState([]);
+export const Card = () => {
+  const [data, setData] = useState([])
   const [load, setLoad] = useState(false);
 
 
+  async function getData() {
+    setLoad(true);
+    const _data = await getDocs(moviesRef);
+    const result = [];
+    _data.forEach((doc) => {
+      let res = doc.data();
+      res.id = doc.id;
+      result.push(res)
+    })
+    setData(result)
+    setLoad(false)
+  }
   useEffect(() => {
-    async function getData() {
-      setLoad(true);
-      const _data = await getDocs(moviesRef);
-      const result = [];
-      _data.forEach((doc) => {
-        let res = doc.data();
-        res.id = doc.id;
-        result.push(res)
-      })
-      setData(result)
-      setLoad(false)
-    }
     getData();
   }, [])
 
 
   return (
-    <div className=" flex h-screen text-center flex-wrap justify-center mt-4">
+    <div className=" flex h-screen text-center flex-wrap   justify-center mt-4">
       {load ?
         <HomeCard />
         :
@@ -62,4 +62,3 @@ const Card = () => {
   );
 };
 
-export default Card;
