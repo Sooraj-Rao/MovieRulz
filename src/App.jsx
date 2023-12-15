@@ -21,7 +21,7 @@ function App() {
   return (
     <div>
       <ReactNotifications />
-      <Header />
+      <Header isAdmin={isAdmin} />
       <Routes>
         <Route path='/' element={<Card />}></Route>
         {

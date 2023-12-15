@@ -28,6 +28,18 @@ const UpdateModal = ({ showUpdateModal, setshowUpdateModal }) => {
     }
 
     const Update = async () => {
+        if (Input.title == '' || Input.description == '' || Input.image == '' || Input.year == '') {
+            return failMessage('Hmmm,Dont empty the fileds bro!', 'default')
+        }
+        if (Input.title == showUpdateModal.two.title && Input.year == showUpdateModal.two.year && Input.description == showUpdateModal.two.description && Input.image == showUpdateModal.two.image) {
+            return failMessage('There are no changes made to Update !', 'default')
+        }
+        if(Input.year.length!=4){
+            return failMessage('Enter a valid Year !', 'default')
+        }
+        if(Input.description.length<100){
+            return failMessage('Description is too short !', 'default')
+        }
         try {
             setLoad(true);
             const DocRef = doc(db, "Movies", showUpdateModal.two.id);
@@ -65,20 +77,20 @@ const UpdateModal = ({ showUpdateModal, setshowUpdateModal }) => {
                             <div className="grid gap-4 mb-4 grid-cols-2">
                                 <div className="col-span-2">
                                     <label className="block mb-2 text-sm font-medium text-gray-900 ">Title</label>
-                                    <input value={Input.title} name="title" onChange={handleChange} id="name" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type product name" required="" />
+                                    <input value={Input.title} name="title" onChange={handleChange} id="name" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Name of Movie" required="" />
                                 </div>
                                 <div className="col-span-2">
                                     <label className="block mb-2 text-sm font-medium text-gray-900 ">Year</label>
-                                    <input value={Input.year} name="year" onChange={handleChange} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type product name" required="" />
+                                    <input type='number' value={Input.year} name="year" onChange={handleChange} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Movie release year" required="" />
                                 </div>
                                 <div className="col-span-2">
                                     <label className="block mb-2 text-sm font-medium text-gray-900 ">Image Source</label>
-                                    <input value={Input.image} name="image" onChange={handleChange} id="name" className="bg-gray-50 border border-gray-300 text-gray-900  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600  block w-full p-2.5 " placeholder="Type product name" required="" />
+                                    <input value={Input.image} name="image" onChange={handleChange} id="name" className="bg-gray-50 border border-gray-300 text-gray-900  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600  block w-full p-2.5 " placeholder="Image URL" required="" />
                                 </div>
 
                                 <div className="col-span-2">
                                     <label className="block mb-2 text-sm font-medium text-gray-900 ">Description</label>
-                                    <textarea value={Input.description} name="description" onChange={handleChange} id="description" rows="4" className="block p-2.5 w-full resize-none text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 " placeholder="Write product description here"></textarea>
+                                    <textarea value={Input.description} name="description" onChange={handleChange} id="description" rows="4" className="block p-2.5 w-full resize-none text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 " placeholder="Movie description "></textarea>
                                 </div>
                             </div>
                             <button onClick={Update} type="submit" className="text-white  items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center  ">

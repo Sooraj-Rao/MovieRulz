@@ -11,6 +11,7 @@ import { Tooltip } from 'react-tooltip'
 const ViewAll = () => {
     const [data, setData] = useState([])
     const [load, setLoad] = useState(false)
+    const [loader, setloader] = useState(false);
     const [showUpdateModal, setshowUpdateModal] = useState({
         one: false,
         two: ''
@@ -23,12 +24,15 @@ const ViewAll = () => {
 
     const handleDelete = async (item) => {
         try {
+            setloader(true)
             await deleteDoc(doc(db, "Movies", item.id));
-            getData();
-            setAreYou({ ...AreYou, item: '', confirm: false })
             failMessage(`Succesfully  Deleted Movie ${item.title}!`, 'success')
+            setloader(false)
+            setAreYou({ ...AreYou, item: '', confirm: false })
+            getData();
         } catch (error) {
-            failMessage(`Failed to Delete Movie ${item.title}!`, 'info')
+            setloader(false)
+            failMessage(`Failed to Delete Movie ${item.title}!`, 'default')
         }
     };
 
@@ -63,7 +67,7 @@ const ViewAll = () => {
             {
                 AreYou.one && <AreYouSure AreYou={AreYou} setAreYou={setAreYou} />
             }
-            <div  className={`relative overflow-x-auto shadow-md sm:rounded-lg ${showUpdateModal.one || AreYou.one ? ' blur-md  contrast-50' : 'blur-none'}`}>
+            <div className={`relative overflow-x-auto shadow-md sm:rounded-lg ${showUpdateModal.one || AreYou.one ? ' blur-md  contrast-50' : 'blur-none'}`}>
                 <table className="w-full text-sm text-left  text-gray-500 ">
                     {data && !load &&
                         <thead className="text-xs text-gray-700 uppercase bg-gray-50 ">
@@ -108,11 +112,16 @@ const ViewAll = () => {
                                             </a>
                                         </td>
                                         <td className=" py-4   ">
-                                            <a className=" flex justify-center" data-tooltip-id="my-tooltip" data-tooltip-content="Delete">
-                                                <span onClick={() => setAreYou({ ...AreYou, one: true, item: item })}>
-                                                    <svg height="1.3rem" className=' cursor-pointer' viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M10 11V17" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path> <path d="M14 11V17" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path> <path d="M4 7H20" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path> <path d="M6 7H12H18V18C18 19.6569 16.6569 21 15 21H9C7.34315 21 6 19.6569 6 18V7Z" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path> <path d="M9 5C9 3.89543 9.89543 3 11 3H13C14.1046 3 15 3.89543 15 5V7H9V5Z" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path> </g></svg>
-                                                </span>
-                                            </a>
+                                            {
+                                                AreYou.confirm && AreYou.item.id == item.id ?
+                                                    <h1>Loading</h1>
+                                                    :
+                                                    <a className=" flex justify-center" data-tooltip-id="my-tooltip" data-tooltip-content="Delete">
+                                                        <span onClick={() => setAreYou({ ...AreYou, one: true, item: item })}>
+                                                            <svg height="1.3rem" className=' cursor-pointer' viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M10 11V17" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path> <path d="M14 11V17" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path> <path d="M4 7H20" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path> <path d="M6 7H12H18V18C18 19.6569 16.6569 21 15 21H9C7.34315 21 6 19.6569 6 18V7Z" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path> <path d="M9 5C9 3.89543 9.89543 3 11 3H13C14.1046 3 15 3.89543 15 5V7H9V5Z" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path> </g></svg>
+                                                        </span>
+                                                    </a>
+                                            }
                                         </td>
                                         <Tooltip id="my-tooltip" />
                                     </tr>
