@@ -40,7 +40,7 @@ const Card = () => {
               <div className="bg-blue-100 group flex justify-center rounded-lg overflow-hidden cursor-pointer text-xl h-[23rem] w-64 m-4  " key={i}>
                 <div className="text-lg font-sans ">
                   <div className=" flex justify-center h-3/4 w-[19rem] overflow-hidden " >
-                    <img src={val.image} className="group-hover:scale-110  h-full w-full duration-300" />
+                    <img src={val.image ? val.image : '/play.png'} className="group-hover:scale-110  h-full w-full duration-300" />
                   </div>
                   <h1 className=" font-semibold  text-xl mt-2">{val.title}</h1>
                   <span className=" flex justify-center h-6"><ReactStars

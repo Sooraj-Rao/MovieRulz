@@ -5,56 +5,45 @@ import swal from 'sweetalert';
 import { where, getDocs, query, getDoc, doc } from 'firebase/firestore';
 import { db, usersRef } from './Firebase/Firebase';
 import bcrypt from 'bcryptjs'
-import { Appstate } from '../App';
 import { failMessage } from './Constants';
 import { PasswordSVG, PhoneSVG } from './SVG/Svg';
+import { useCookies } from 'react-cookie';
 
 
 
 const Login = () => {
   const navigate = useNavigate();
-  const useAppState = useContext(Appstate);
   const [loading, setLoading] = useState(false)
+  const [cookie, setCookie] = useCookies(['login', 'mob', 'name'])
   const [Input, setInput] = useState({
     mobile: "",
     password: ""
   })
 
   const login = async () => {
-    console.log('Clicked');
     setLoading(true);
     try {
-      const docRef = doc(db, "users", Input.mobile);
-      const docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        console.log('User found');
+      const quer = query(usersRef, where('mobile', '==', Input.mobile));
+      const querySnapshot = await getDocs(quer);
+      const userData = querySnapshot.docs.map((doc) => doc.data());
+      const user = userData.find((_data) => {
+        return bcrypt.compareSync(Input.password, _data.password);
+      });
+      if (!user) {
+        return failMessage('Invalid Credentials!', 'error');
       } else {
-        console.log('No user found');
+        setCookie('login', user.password)
+        setCookie('mobile', user.mobile)
+        setCookie('name', user.name)
+        failMessage('Login Succesfull!', 'success');
+        setTimeout(() => {
+          navigate('/')
+        }, 3000);
       }
-      // const quer = query(usersRef, where('mobile', '==', Input.mobile))
-      // const querySnapshot = await getDocs(quer);
-      // querySnapshot.forEach((doc) => {
-      //   const _data = doc.data()
-      //   const isUser = bcrypt.compareSync(Input.password, _data.password);
-      //   if (isUser) {
-      //     console.log(isUser);
-      //     useAppState.setLogin(true);
-      //     useAppState.setUserName(_data.name);
-      //     swal({
-      //       title: "Login Successfull",
-      //       icon: "success",
-      //       buttons: false,
-      //       timer: 2000
-      //     })
-      //     navigate('/')
-      //   } else {
-      //     failMessage('Invalid Credentials!')
-      //   }
-      // })
 
     } catch (error) {
       console.log(error);
-      failMessage('Unable to Login!','info')
+      failMessage('Unable to Login!', 'info')
     }
     setLoading(false);
   }

@@ -4,15 +4,15 @@ import { reviewsRef, db } from './Firebase/Firebase';
 import { addDoc, doc, updateDoc, query, where, getDocs } from 'firebase/firestore';
 import { ThreeDots, TailSpin } from 'react-loader-spinner';
 import swal from 'sweetalert';
-import { Appstate } from '../App';
 import { useNavigate } from 'react-router-dom';
 import { ReviewAnim } from './Animate/DatailAnim';
 import { failMessage } from './Constants';
+import { MovieContext } from './Context/Context';
 
-const Review = ({ id, Reviews, prevRating, userRated }) => {
-  const useAppState = useContext(Appstate);
+const Review = ({ id, Reviews, prevRating, userRated, getReview }) => {
+  const context = useContext(MovieContext);
+  const { login, userData } = context;
   const navigate = useNavigate();
-
   const [rating, setRating] = useState(0);
   const [loader, setLoader] = useState(false);
   const [input, setinput] = useState('');
@@ -20,33 +20,33 @@ const Review = ({ id, Reviews, prevRating, userRated }) => {
 
   const sendReview = async () => {
     if (rating == 0) {
-      return failMessage('Rating cannot be 0 stars!')
+      return failMessage('Rating cannot be 0 stars!', 'info')
     } else if (input.length < 20) {
-      return failMessage('Review is too short!')
+      return failMessage('Review is too short!', 'info')
     }
     try {
-      if (useAppState.login) {
+      if (login) {
         setLoader(true)
         await addDoc(reviewsRef, {
           movieid: id,
-          name: useAppState.username,
+          name: userData.name,
           rating: rating,
           thought: input,
           timestamp: new Date().getTime()
         })
-
         const ref = doc(db, "Movies", id);
         await updateDoc(ref, {
           rating: prevRating + rating,
           rated: userRated + 1
         })
+        getReview();
         setLoader(false)
         setinput('');
       } else {
         navigate('/Login')
       }
     } catch (error) {
-      return failMessage('Unable to add Review!')
+      return failMessage('Unable to add Review!', 'info')
     }
   }
 

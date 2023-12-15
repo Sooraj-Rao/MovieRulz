@@ -49,7 +49,6 @@ const Detail = () => {
       failMessage('Unable to fetch movie Reviews!')
     }
   }
-
   useEffect(() => {
     getData();
   }, [id]);
@@ -82,9 +81,11 @@ const Detail = () => {
               <span className="md:text-l text-base text font w-full ">
                 {data.description}
               </span>
+              <h1>Watch Trailer</h1>
+              <h1>Movie Amazon prime</h1>
               <br />
               <br />
-              <Review id={id} Reviews={Reviews} prevRating={data.rating} userRated={data.rated} />
+              <Review getReview={getReview} id={id} Reviews={Reviews} prevRating={data.rating} userRated={data.rated} />
             </div>
           </>
         }

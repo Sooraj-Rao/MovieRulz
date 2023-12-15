@@ -3,12 +3,13 @@ import { addDoc } from "firebase/firestore";
 import { TailSpin  } from "react-loader-spinner";
 import { moviesRef } from "./Firebase/Firebase";
 import swal  from "sweetalert";
-import { Appstate } from "../App";
 import { useContext } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
+import { MovieContext } from "./Context/Context";
 
 const AddMovie = () => {
-  const useAppState=useContext(Appstate);
+  const context=useContext(MovieContext);
+  const {login,userData}=context;
   const navigate=useNavigate();
     const [form, setForm] = useState({
         title:"",
@@ -32,7 +33,7 @@ const AddMovie = () => {
     }) 
   }else{
     try {
-      if(useAppState.login){
+      if(login){
         setLoading(true)
          await addDoc(moviesRef,form); 
          swal({
