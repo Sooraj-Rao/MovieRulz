@@ -44,6 +44,7 @@ const ViewReview = () => {
             setData(result)
             setLoad(false)
         } catch (error) {
+            setLoad(false)
             failMessage('Failed to fetch Reviews!', 'info')
         }
     }

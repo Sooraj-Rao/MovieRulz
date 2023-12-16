@@ -4,6 +4,7 @@ import { getDocs } from "firebase/firestore";
 import { moviesRef } from "./Firebase/Firebase";
 import {  useNavigate } from "react-router-dom";
 import { HomeCard } from "./Animate/HomeCard";
+import { failMessage } from "./Constants";
 
 
 export const Card = () => {
@@ -13,16 +14,21 @@ export const Card = () => {
 
 
   async function getData() {
-    setLoad(true);
-    const _data = await getDocs(moviesRef);
-    const result = [];
-    _data.forEach((doc) => {
-      let res = doc.data();
-      res.id = doc.id;
-      result.push(res)
-    })
-    setData(result)
-    setLoad(false)
+   try {
+     setLoad(true);
+     const _data = await getDocs(moviesRef);
+     const result = [];
+     _data.forEach((doc) => {
+       let res = doc.data();
+       res.id = doc.id;
+       result.push(res)
+     })
+     setData(result)
+     setLoad(false)
+    } catch (error) {
+     setLoad(false)
+     failMessage('Unable to fetch Movies','info')
+   }
   }
   useEffect(() => {
     getData();

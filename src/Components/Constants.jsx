@@ -8,7 +8,7 @@ export const failMessage = (message,type) => {
     type: type,
     container: "top-center",
     dismiss: {
-      duration: 5000,
+      duration: 3000,
       onScreen: true,
     },
   });

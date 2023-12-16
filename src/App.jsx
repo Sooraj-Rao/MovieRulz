@@ -17,7 +17,7 @@ import ViewReview from './Components/ViewReview';
 function App() {
   const context = useContext(MovieContext);
 
-  const { login, isAdmin } = context;
+  const { login, isAdmin,userData } = context;
 
   return (
     <div>
@@ -39,7 +39,7 @@ function App() {
             }
           </>
         }
-        <Route path='/movie/:id' element={<Detail />}></Route>
+        <Route path='/movie/:id' element={<Detail userData={userData} />}></Route>
         {
           !login &&
           <>

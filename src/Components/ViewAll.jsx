@@ -50,6 +50,7 @@ const ViewAll = () => {
             setData(result)
             setLoad(false)
         } catch (error) {
+            setLoad(false)
             failMessage('Failed to fetch Movies!', 'info')
         }
     }

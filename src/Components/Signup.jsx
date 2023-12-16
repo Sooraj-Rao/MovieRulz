@@ -47,6 +47,7 @@ const SignUp = () => {
         setLoading(false);
       })
       .catch((error) => {
+        setLoading(false);
         failMessage('Failed to Send OTP!', 'info')
       });
   };

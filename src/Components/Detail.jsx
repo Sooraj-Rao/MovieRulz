@@ -10,8 +10,9 @@ import { failMessage } from "./Constants";
 import { YTSVG } from "./SVG/Svg";
 
 
-const Detail = () => {
+const Detail = ({ userData }) => {
   const [load, setLoad] = useState(false);
+  const [LimitReached, setLimitReached] = useState(false);
   const [data, setData] = useState({
     title: "",
     year: "",
@@ -23,6 +24,7 @@ const Detail = () => {
   const [Reviews, setReviews] = useState([]);
 
   const { id } = useParams();
+
 
   async function getData() {
     try {
@@ -47,14 +49,19 @@ const Detail = () => {
       setReviews(newData);
       setLoad(false)
     } catch (error) {
+      setLoad(false)
       failMessage('Unable to fetch movie Reviews!', 'info')
     }
   }
   useEffect(() => {
-    getData();
-  }, [id]);
+    data.title == '' && getData();
+    setLimitReached(Reviews.find((e) => e.name == userData.name))
+  }, [id,Reviews]);
+  
 
-
+  let Rating = ((data.rated != 0 ? (data?.rating / data?.rated).toFixed(1) : 'No reviews'))
+  Rating = (Rating.includes('.0')) ? Rating.split('.')[0] : Rating;
+  
   return (
     <>
       <div className={` mx-auto md:mt-10 mt-4 md:w-5/6 w-11/12   h-screen  flex md:flex-row flex-col  md:p-0
@@ -73,8 +80,12 @@ const Detail = () => {
               </h1>
               <h1 className=" flex gap-4 items-center">
                 <ReactStars className="mt-2 mb-2" size={20} value={data.rating / data.rated} color2="black" color1="gray" edit={false} />
-                <span className=" font-semibold">{(data.rating / data.rated).toFixed()}/5
+                <span className=" font-semibold">
                   <span className=" font-normal pl-2">
+                    <span className=" font-semibold text-xl">
+                      {Rating}
+                    </span>
+                    /5
                     Rating
                   </span>
                 </span>
@@ -82,7 +93,7 @@ const Detail = () => {
               <span className="md:text-l text-base text font w-full ">
                 {data.description}
               </span>
-              <hr className=" border border-slate-300" />
+              <hr className=" border border-slate-200 my-2" />
               <div className="flex gap-x-20 pt-5 ">
                 <div className="">
                   <span>
@@ -90,8 +101,8 @@ const Detail = () => {
                   </span>
                   <span onClick={() => window.open(import.meta.env.VITE_YTURL + data.title + ' trailer')} className=" cursor-pointer flex gap-5 items-center mt-5 bg-slate-300 hover:bg-slate-200 p-2 rounded-md">
                     <span>
-                  {YTSVG}
-                           </span>
+                      {YTSVG}
+                    </span>
                     <span> Youtube</span>
                   </span>
                 </div>
@@ -109,7 +120,7 @@ const Detail = () => {
               </div>
               <br />
               <br />
-              <Review getReview={getReview} id={id} Reviews={Reviews} prevRating={data.rating} userRated={data.rated} />
+              <Review LimitReached={LimitReached} getReview={getReview} id={id} Reviews={Reviews} prevRating={data.rating} userRated={data.rated} />
             </div>
           </>
         }
