@@ -44,7 +44,6 @@ const AddMovie = () => {
         }
       } catch (error) {
         setLoading(false)
-        console.log(error);
         failMessage('Unable to add Movie', 'info')
       }
     }

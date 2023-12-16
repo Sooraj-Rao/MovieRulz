@@ -12,17 +12,13 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "firebase": "^10.7.1",
-    "framer-motion": "^10.16.4",
     "react": "^18.2.0",
     "react-cookie": "^6.1.1",
     "react-dom": "^18.2.0",
-    "react-loader-spinner": "^6.1.0",
     "react-notifications-component": "^4.0.1",
     "react-router-dom": "^6.16.0",
     "react-stars": "^2.2.5",
-    "react-tooltip": "^5.25.0",
-    "sweetalert": "^2.1.2",
-    "uuid4": "^2.0.3"
+    "react-tooltip": "^5.25.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.15",

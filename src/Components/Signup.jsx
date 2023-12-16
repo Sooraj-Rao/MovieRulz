@@ -13,6 +13,7 @@ import app from "./Firebase/Firebase";
 import swal from "sweetalert";
 import { addDoc } from "firebase/firestore";
 import { PasswordSVG, PhoneSVG, UserSVG } from "./SVG/Svg";
+import { failMessage } from './Constants.jsx';
 
 const auth = getAuth(app);
 
@@ -43,27 +44,29 @@ const SignUp = () => {
     signInWithPhoneNumber(auth, `+91${Input.mobile}`, appVerifier)
       .then((confirmationResult) => {
         window.confirmationResult = confirmationResult;
-        console.log('OTP sent');
+        failMessage(`Sent OTP to ${Input.mobile} !`, 'success')
         setOtpSent(true);
         setLoading(false);
       })
       .catch((error) => {
-        console.log(error);
+        failMessage('Failed to Send OTP!', 'info')
       });
   };
 
   const verifyOtp = () => {
-    try {
-      setLoading(true);
-      window.confirmationResult.confirm(OTP).then((result) => {
+    setLoading(true);
+    window.confirmationResult.confirm(OTP)
+      .then((result) => {
         uploadData();
-        console.log('Registerd');
+        failMessage('Succesfully Registerd!', 'success')
         navigate('/Login')
         setLoading(false);
       })
-    } catch (error) {
-      console.log(error);
-    }
+      .catch(() => {
+        setLoading(false);
+        failMessage('Invalid OTP!', 'info')
+      })
+
   }
 
   const uploadData = async () => {
@@ -76,7 +79,7 @@ const SignUp = () => {
         mobile: Input.mobile
       })
     } catch (error) {
-      console.log(error);
+      failMessage('Registration failed!', 'info')
     }
   }
 
@@ -89,7 +92,7 @@ const SignUp = () => {
 
   return (
     <>
-     
+
       {otpSent ? (
         <div className=" h-[calc(100vh-5rem)] bg-slate-300">
           <div className="flex w-full justify-center items-center md:min-h-fit pt-10  ">
@@ -98,20 +101,20 @@ const SignUp = () => {
                 OTP Authentication
               </h1>
               <div className=" flex flex-col h-24 text-lg items-center justify-center">
-                <p>Enter  OTP sent to {Input.mobile}</p>
+                <p>Enter 6 Digit  OTP sent to {Input.mobile}</p>
                 <br />
                 <input
                   required
                   autoFocus
                   placeholder="6 digit OTP"
                   type="number"
-                  className="text-center h-12 pl-2 text-xl font-bold md:w-1/2 w-3/5  bg-slate-200  outline-none  rounded"
+                  className="text-center h-12 pl-2 text-xl font-bold md:w-2/3 w-3/5  bg-slate-200  outline-none  rounded"
                   value={OTP}
                   onChange={(e) => setOTP(e.target.value)}
                 />
               </div>
               <div className="md:w-1/2 w-1/2  mx-auto mt-5 ">
-                <button onClick={verifyOtp} className="rounded w-full my-2 text-xl h-11 text-white bg-blue-600">
+                <button disabled={OTP.length != 6} onClick={verifyOtp} className="rounded disabled:cursor-not-allowed disabled:bg-gray-500 w-full my-2 text-xl h-11 text-white bg-blue-600">
                   {loading ? (
                     <span className=' flex justify-center'>
                       <h1 className=' h-5 w-5 border-[3px] rounded-full border-blue-200 border-t-transparent animate-spin '></h1>
@@ -182,7 +185,7 @@ const SignUp = () => {
           </div>
         </section>
       )}
-       <div id="recaptcha-container"></div>
+      <div id="recaptcha-container"></div>
     </>
   );
 };

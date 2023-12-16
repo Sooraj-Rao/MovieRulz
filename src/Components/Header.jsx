@@ -15,7 +15,10 @@ const Header = ({ isAdmin }) => {
           <Link to={"/viewall"}><span className='p-2  sm:p-3 rounded'>View Movie</span></Link>
           {
             isAdmin &&
+            <>
             <Link to={"/users"}><span className=' p-2  sm:p-3 rounded  '>Users</span></Link>
+            <Link to={"/reviews"}><span className=' p-2  sm:p-3 rounded  '>Reviews</span></Link>
+            </>
           }
         </div>
         :

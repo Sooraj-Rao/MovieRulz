@@ -11,6 +11,7 @@ import 'react-notifications-component/dist/theme.css'
 import { MovieContext } from './Components/Context/Context';
 import ViewAll from './Components/ViewAll';
 import Users from './Components/Users';
+import ViewReview from './Components/ViewReview';
 
 
 function App() {
@@ -31,7 +32,10 @@ function App() {
             <Route path='/viewAll' element={<ViewAll />}></Route>
             {
               isAdmin &&
-              <Route path='/users' element={<Users />}></Route>
+              <>
+                <Route path='/users' element={<Users />}></Route>
+                <Route path='/reviews' element={<ViewReview />}></Route>
+              </>
             }
           </>
         }

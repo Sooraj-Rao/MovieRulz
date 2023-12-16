@@ -29,23 +29,22 @@ const Login = () => {
       const user = userData.find((_data) => {
         return bcrypt.compareSync(Input.password, _data.password);
       });
-      if (!user) {
-        return failMessage('Invalid Credentials!', 'error');
-      } else {
+      if (user) {
         setCookie('login', user.password)
         setCookie('mobile', user.mobile)
         setCookie('name', user.name)
+        setLoading(false);
         failMessage('Login Succesfull!', 'success');
         setTimeout(() => {
-          navigate('/')
+          window.location.href = '/';
         }, 3000);
+      } else {
+        return failMessage('Invalid Credentials!', 'info');
       }
-
     } catch (error) {
-      console.log(error);
+      setLoading(false);
       failMessage('Unable to Login!', 'info')
     }
-    setLoading(false);
   }
 
   const handleChange = (e) => {
@@ -57,7 +56,7 @@ const Login = () => {
     <section className="bg-slate-300">
       <div className=" container flex items-center justify-center  h-[calc(100vh-5rem)] px-6 mx-auto">
         <div className="w-full max-w-md shadow-[0px_0px_10px_1px] shadow-slate-400  rounded-md p-4">
-          <h1 className=" text-center text-2xl">New here ? Signin Now </h1>
+          <h1 className=" text-center text-2xl">Welcome back... Login Now </h1>
 
           <div className="relative flex items-center mt-6">
             <span className="absolute">
@@ -73,7 +72,6 @@ const Login = () => {
 
             <input name='password' value={Input.password} onChange={handleChange} type="password" className="block w-full px-10 py-3 text-gray-700 bg-white border rounded-lg focus:border-blue-400  focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40" placeholder="Password" />
           </div>
-
 
           <div className="mt-6">
             <button onClick={login} className="w-full px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50">

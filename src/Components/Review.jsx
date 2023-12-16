@@ -19,13 +19,13 @@ const Review = ({ id, Reviews, prevRating, userRated, getReview }) => {
 
 
   const sendReview = async () => {
-    if (rating == 0) {
-      return failMessage('Rating cannot be 0 stars!', 'info')
-    } else if (input.length < 20) {
-      return failMessage('Review is too short!', 'info')
-    }
     try {
       if (login) {
+        if (rating == 0) {
+          return failMessage('Rating cannot be 0 stars!', 'info')
+        } else if (input.length < 20) {
+          return failMessage('Review is too short!', 'info')
+        }
         setLoader(true)
         await addDoc(reviewsRef, {
           movieid: id,
@@ -43,7 +43,10 @@ const Review = ({ id, Reviews, prevRating, userRated, getReview }) => {
         setLoader(false)
         setinput('');
       } else {
-        navigate('/Login')
+        failMessage('Please login to Add reviews!', 'info')
+        setTimeout(() => {
+          navigate('/Login')
+        }, 2000);
       }
     } catch (error) {
       return failMessage('Unable to add Review!', 'info')
