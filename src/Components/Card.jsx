@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import ReactStars from "react-stars";
-import { ThreeDots } from "react-loader-spinner";
 import { getDocs } from "firebase/firestore";
 import { moviesRef } from "./Firebase/Firebase";
-import { Link, useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 import { HomeCard } from "./Animate/HomeCard";
 
 

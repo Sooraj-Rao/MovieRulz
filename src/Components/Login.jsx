@@ -1,9 +1,7 @@
-import React, { useContext, useState } from 'react'
-import { TailSpin } from 'react-loader-spinner'
+import  {  useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import swal from 'sweetalert';
-import { where, getDocs, query, getDoc, doc } from 'firebase/firestore';
-import { db, usersRef } from './Firebase/Firebase';
+import { where, getDocs, query } from 'firebase/firestore';
+import {  usersRef } from './Firebase/Firebase';
 import bcrypt from 'bcryptjs'
 import { failMessage } from './Constants';
 import { PasswordSVG, PhoneSVG } from './SVG/Svg';

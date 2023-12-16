@@ -1,9 +1,7 @@
-import React, { useContext, useEffect, useState } from 'react'
+import  { useContext, useState } from 'react'
 import ReactStars from 'react-stars'
 import { reviewsRef, db } from './Firebase/Firebase';
-import { addDoc, doc, updateDoc, query, where, getDocs } from 'firebase/firestore';
-import { ThreeDots, TailSpin } from 'react-loader-spinner';
-import swal from 'sweetalert';
+import { addDoc, doc, updateDoc} from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 import { ReviewAnim } from './Animate/DatailAnim';
 import { failMessage } from './Constants';

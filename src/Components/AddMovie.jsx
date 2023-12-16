@@ -1,10 +1,8 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import { addDoc } from "firebase/firestore";
-import { TailSpin } from "react-loader-spinner";
 import { moviesRef } from "./Firebase/Firebase";
-import swal from "sweetalert";
 import { useContext } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 import { MovieContext } from "./Context/Context";
 import { failMessage } from "./Constants";
 

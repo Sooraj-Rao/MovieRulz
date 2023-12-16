@@ -3,7 +3,7 @@ import { Card } from './Components/Card';
 import { Routes, Route } from 'react-router-dom';
 import AddMovie from './Components/AddMovie';
 import Detail from './Components/Detail';
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import Login from './Components/Login';
 import Signup from './Components/Signup';
 import { ReactNotifications } from 'react-notifications-component'

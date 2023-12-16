@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { doc, setDoc, updateDoc } from "firebase/firestore";
+import { useEffect, useState } from 'react';
+import { doc, setDoc } from "firebase/firestore";
 import { db } from './Firebase/Firebase';
 import { failMessage } from './Constants';
 

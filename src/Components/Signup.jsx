@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import { TailSpin } from "react-loader-spinner";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { usersRef } from "./Firebase/Firebase";
 import bcrypt from 'bcryptjs'
@@ -10,7 +9,6 @@ import {
 } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import app from "./Firebase/Firebase";
-import swal from "sweetalert";
 import { addDoc } from "firebase/firestore";
 import { PasswordSVG, PhoneSVG, UserSVG } from "./SVG/Svg";
 import { failMessage } from './Constants.jsx';
