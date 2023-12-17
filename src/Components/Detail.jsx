@@ -74,8 +74,8 @@ const Detail = ({ userData }) => {
             <div className=" h-96 rounded flex  justify-center  ">
               <img className="md:h-full h-full  rounded    md:w-[25rem] w-[60%] " src={data.image} alt="" />
             </div>
-            <div className="h-[37.5rem] detail w-full   md:px-4 p-2 -mt-3 md:overflow-y-scroll">
-              <h1 className="text-4xl font-bold md:mt-0 mt-3 title">
+            <div className="h-[37.5rem] detail w-full Poppins  md:px-4 p-2 -mt-3 md:overflow-y-scroll">
+              <h1 className=" text-2xl  md:mt-0 mt-3 ">
                 {data.title} <span className=" text-base ">({data.year})</span>
               </h1>
               <h1 className=" flex gap-4 items-center">
@@ -120,7 +120,7 @@ const Detail = ({ userData }) => {
               </div>
               <br />
               <br />
-              <Review LimitReached={LimitReached} getReview={getReview} id={id} Reviews={Reviews} prevRating={data.rating} userRated={data.rated} />
+              <Review getData={getData} LimitReached={LimitReached} getReview={getReview} id={id} Reviews={Reviews} prevRating={data.rating} userRated={data.rated} />
             </div>
           </>
         }

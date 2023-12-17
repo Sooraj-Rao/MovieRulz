@@ -1,4 +1,4 @@
-import  { useContext } from 'react'
+import { useContext } from 'react'
 import { Link } from 'react-router-dom';
 import { LoginSVG } from './SVG/Svg';
 import { MovieContext } from './Context/Context';
@@ -8,7 +8,9 @@ const Header = ({ isAdmin }) => {
   const { login } = context;
   return (
     <div className=' bg-slate-200  font-semibold md:px-10 p-2 h-20 flex justify-between items-center sticky top-0 header z-50'>
-      <Link to={"/"}> <span className=' text-xl sm:text-4xl cursor-pointer'><span className=' text-red-800'>Movie</span>Rulz</span></Link>
+      <Link to={"/"}> <span className='  text-xl sm:text-4xl cursor-pointer Poppins'><span className=' text-blue-800 font-bold'>Movie</span>
+        Rulz
+      </span></Link>
       {login ?
         <div className='flex gap-2 text-xs sm:text-lg'>
           <Link to={"/addMovie"}><span className='p-2   sm:p-3 rounded  '>Add Movie</span></Link>
@@ -16,8 +18,8 @@ const Header = ({ isAdmin }) => {
           {
             isAdmin &&
             <>
-            <Link to={"/users"}><span className=' p-2  sm:p-3 rounded  '>Users</span></Link>
-            <Link to={"/reviews"}><span className=' p-2  sm:p-3 rounded  '>Reviews</span></Link>
+              <Link to={"/users"}><span className=' p-2  sm:p-3 rounded  '>Users</span></Link>
+              <Link to={"/reviews"}><span className=' p-2  sm:p-3 rounded  '>Reviews</span></Link>
             </>
           }
         </div>

@@ -7,7 +7,7 @@ import { ReviewAnim } from './Animate/DatailAnim';
 import { failMessage } from './Constants';
 import { MovieContext } from './Context/Context';
 
-const Review = ({ id, Reviews, prevRating, userRated, getReview, LimitReached }) => {
+const Review = ({getData, id, Reviews, prevRating, userRated, getReview, LimitReached }) => {
   const context = useContext(MovieContext);
   const { login, userData } = context;
   const navigate = useNavigate();
@@ -38,6 +38,7 @@ const Review = ({ id, Reviews, prevRating, userRated, getReview, LimitReached })
           rated: userRated + 1
         })
         getReview();
+        getData();
         setLoader(false)
         setinput('');
         setRating(0)
@@ -46,7 +47,7 @@ const Review = ({ id, Reviews, prevRating, userRated, getReview, LimitReached })
         failMessage('Please login to Add reviews!', 'info')
         setTimeout(() => {
           navigate('/Login')
-        }, 2000);
+        }, 3000);
       }
     } catch (error) {
       return failMessage('Unable to add Review!', 'info')
