@@ -35,21 +35,45 @@ const SignUp = () => {
     }, auth);
   }
 
+  const Validate = () => {
+    if (!Input.name || !Input.mobile || !Input.password || !Input.confirmPass) {
+      return failMessage('All fileds Mandatory', 'info')
+    }
+    if (Input.name.length < 3) {
+      return failMessage('Name is too short', 'info')
+    }
+    if (Input.mobile.length != 10) {
+      return failMessage('Invalid phone number', 'info')
+    }
+    if (Input.password.length < 6) {
+      return failMessage('Password is too short', 'info')
+    }
+    if (Input.password !== Input.confirmPass) {
+      return failMessage('Password doesnt match', 'info')
+    }
+    requestOtp();
+  }
+
   const requestOtp = () => {
-    setLoading(true);
-    generateRecaptha();
-    let appVerifier = window.recaptchaVerifier;
-    signInWithPhoneNumber(auth, `+91${Input.mobile}`, appVerifier)
-      .then((confirmationResult) => {
-        window.confirmationResult = confirmationResult;
-        failMessage(`Sent OTP to ${Input.mobile} !`, 'success')
-        setOtpSent(true);
-        setLoading(false);
-      })
-      .catch((error) => {
-        setLoading(false);
-        failMessage('Failed to Send OTP!', 'info')
-      });
+  try {
+      setLoading(true);
+      generateRecaptha();
+      let appVerifier = window.recaptchaVerifier;
+      signInWithPhoneNumber(auth, `+91${Input.mobile}`, appVerifier)
+        .then((confirmationResult) => {
+          window.confirmationResult = confirmationResult;
+          failMessage(`Sent OTP to ${Input.mobile} !`, 'success')
+          setOtpSent(true);
+          setLoading(false);
+        })
+        .catch((error) => {
+          setLoading(false);
+          failMessage('Failed to Send OTP!', 'info')
+        });
+      } catch (error) {
+        
+        failMessage('Failed to Generate OTP!', 'info')
+  }
   };
 
   const verifyOtp = () => {
@@ -162,7 +186,7 @@ const SignUp = () => {
               </div>
 
               <div className="mt-6">
-                <button onClick={requestOtp} className="w-full px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 trans Input bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50">
+                <button onClick={Validate} className="w-full px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 trans Input bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50">
                   {
                     loading ?
 

@@ -43,20 +43,20 @@ export const Card = () => {
         data?.map((val, i) => {
           return (
             <div key={i} onClick={() => navigate(`/movie/${val.id}`)}>
-              <div className="bg-blue-100 group flex justify-center rounded-lg overflow-hidden cursor-pointer text-xl sm:h-[23rem] w-64 m-4  " key={i}>
-                <div className="text-lg font-sans ">
+              <div className="bg-blue-100 group flex justify-center text-justify  rounded-lg overflow-hidden cursor-pointer text-xl sm:h-[23rem] w-64 m-4  " key={i}>
+                <div className="text-lg font-sans   ">
                   <div className=" flex justify-center h-3/4 w-[19rem] overflow-hidden " >
                     <img src={val.image ? val.image : '/play.png'} className="group-hover:scale-110  h-full w-full duration-300" />
                   </div>
-                  <h1 className=" font-semibold  text-xl mt-2">{val.title}</h1>
-                  <span className=" flex justify-center h-6"><ReactStars
+                  <h1 className=" font-semibold  text-xl mt-2 ml-10">{val.title}</h1>
+                  <span className=" flex justify-start ml-10 h-6"><ReactStars
                     size={20}
                     value={val.rating / val.rated}
                     edit={false}
                     color1="rgb(162, 155, 155)"
                     color2="black"
                   /></span>
-                  <span>{val.year}</span>
+                  <span className=" ml-10">{val.year}</span>
                 </div>
               </div>
             </div>

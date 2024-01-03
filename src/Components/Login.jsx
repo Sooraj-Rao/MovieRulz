@@ -1,7 +1,7 @@
-import  {  useState } from 'react'
+import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { where, getDocs, query } from 'firebase/firestore';
-import {  usersRef } from './Firebase/Firebase';
+import { usersRef } from './Firebase/Firebase';
 import bcrypt from 'bcryptjs'
 import { failMessage } from './Constants';
 import { PasswordSVG, PhoneSVG } from './SVG/Svg';
@@ -17,6 +17,16 @@ const Login = () => {
     mobile: "",
     password: ""
   })
+
+  const Validate = () => {
+    if (Input.mobile.length != 10) {
+      return failMessage('Invalid phone number!', 'info')
+    }
+    if (Input.password.length < 6) {
+      return failMessage('Password is too short!', 'info')
+    }
+
+  }
 
   const login = async () => {
     setLoading(true);
@@ -72,7 +82,7 @@ const Login = () => {
           </div>
 
           <div className="mt-6">
-            <button onClick={login} className="w-full px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50">
+            <button onClick={Validate} className="w-full px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50">
               {
                 loading ?
                   <span className=' flex justify-center'>
