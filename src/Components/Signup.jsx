@@ -35,7 +35,8 @@ const SignUp = () => {
     }, auth);
   }
 
-  const Validate = () => {
+  const Validate = (e) => {
+    e.preventDefault();
     if (!Input.name || !Input.mobile || !Input.password || !Input.confirmPass) {
       return failMessage('All fileds Mandatory', 'info')
     }
@@ -55,7 +56,7 @@ const SignUp = () => {
   }
 
   const requestOtp = () => {
-  try {
+    try {
       setLoading(true);
       generateRecaptha();
       let appVerifier = window.recaptchaVerifier;
@@ -66,20 +67,21 @@ const SignUp = () => {
           setOtpSent(true);
           setLoading(false);
         })
-        .catch((error) => {
+        .catch(() => {
           setLoading(false);
           failMessage('Failed to Send OTP!', 'info')
         });
-      } catch (error) {
-        
-        failMessage('Failed to Generate OTP!', 'info')
-  }
+    } catch (error) {
+
+      failMessage('Failed to Generate OTP!', 'info')
+    }
   };
 
-  const verifyOtp = () => {
+  const verifyOtp = (e) => {
+    e.preventDefault();
     setLoading(true);
     window.confirmationResult.confirm(OTP)
-      .then((result) => {
+      .then(() => {
         uploadData();
         failMessage('Succesfully Registerd!', 'success')
         navigate('/Login')
@@ -102,7 +104,7 @@ const SignUp = () => {
         mobile: Input.mobile
       })
     } catch (error) {
-      failMessage('Registration failed!', 'info')
+     return failMessage('Registration failed!', 'info')
     }
   }
 
@@ -119,7 +121,7 @@ const SignUp = () => {
       {otpSent ? (
         <div className=" h-[calc(100vh-5rem)] bg-slate-300">
           <div className="flex w-full justify-center items-center md:min-h-fit pt-10  ">
-            <div className="h-full md:w-2/6 w-9/12 border border-gray-500  rounded-lg pt-10 p-8 shadow-[0px_0px_10px_1px] shadow-slate-400 ">
+            <form onSubmit={verifyOtp} className="h-full md:w-2/6 w-9/12 border border-gray-500  rounded-lg pt-10 p-8 shadow-[0px_0px_10px_1px] shadow-slate-400 ">
               <h1 className="md:pb-16 pb-10 md:text-2xl text-xl text-center">
                 OTP Authentication
               </h1>
@@ -137,7 +139,7 @@ const SignUp = () => {
                 />
               </div>
               <div className="md:w-1/2 w-1/2  mx-auto mt-5 ">
-                <button disabled={OTP.length != 6} onClick={verifyOtp} className="rounded disabled:cursor-not-allowed disabled:bg-gray-500 w-full my-2 text-xl h-11 text-white bg-blue-600">
+                <button disabled={OTP.length != 6}  className="rounded disabled:cursor-not-allowed disabled:bg-gray-500 w-full my-2 text-xl h-11 text-white bg-blue-600">
                   {loading ? (
                     <span className=' flex justify-center'>
                       <h1 className=' h-5 w-5 border-[3px] rounded-full border-blue-200 border-t-transparent animate-spin '></h1>
@@ -147,13 +149,13 @@ const SignUp = () => {
                   )}
                 </button>
               </div>
-            </div>
+            </form>
           </div>
         </div>
       ) : (
         <section className="bg-slate-300">
           <div className=" container flex items-center justify-center  h-[calc(100vh-5rem)] px-6 mx-auto">
-            <div className="w-full max-w-md shadow-[0px_0px_10px_1px] shadow-slate-400  rounded-md p-4">
+            <form onSubmit={Validate} className="w-full max-w-md shadow-[0px_0px_10px_1px] shadow-slate-400  rounded-md p-4">
               <h1 className=" text-center text-2xl">New here ? Signin Now </h1>
               <div className="relative flex items-center mt-8">
                 <span className="absolute">
@@ -186,7 +188,7 @@ const SignUp = () => {
               </div>
 
               <div className="mt-6">
-                <button onClick={Validate} className="w-full px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 trans Input bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50">
+                <button className="w-full px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 trans Input bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50">
                   {
                     loading ?
 
@@ -204,7 +206,7 @@ const SignUp = () => {
                   </Link>
                 </div>
               </div>
-            </div>
+            </form>
           </div>
         </section>
       )}

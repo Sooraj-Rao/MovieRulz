@@ -21,7 +21,8 @@ const AddMovie = () => {
 
   const [loading, setLoading] = useState(false);
 
-  const addMovie = async () => {
+  const addMovie = async (e) => {
+    e.preventDefault();
     if (!Input.title || !Input.year || !Input.image || !Input.description) {
       failMessage('All fields mandatory!', 'info')
     } else {
@@ -56,7 +57,7 @@ const AddMovie = () => {
   return (
     <section className="bg-slate-300">
       <div className=" container flex items-center justify-center  h-[calc(100vh-5rem)] px-6 mx-auto">
-        <div className="w-full max-w-md shadow-[0px_0px_10px_1px] shadow-slate-400  rounded-md p-4">
+        <form onSubmit={addMovie} className="w-full max-w-md shadow-[0px_0px_10px_1px] shadow-slate-400  rounded-md p-4">
           <h1 className=" text-center text-2xl">Add Movie</h1>
           <div className="relative flex items-center mt-8">
             <span className="absolute">
@@ -85,7 +86,7 @@ const AddMovie = () => {
           </div>
 
           <div className="mt-6">
-            <button onClick={addMovie} className="w-full px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 trans Input bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50">
+            <button  className="w-full px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 trans Input bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50">
               {
                 loading ?
 
@@ -99,7 +100,7 @@ const AddMovie = () => {
 
 
           </div>
-        </div>
+        </form>
       </div>
     </section>
   );

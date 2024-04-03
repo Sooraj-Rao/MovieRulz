@@ -3,7 +3,7 @@ import { doc, setDoc } from "firebase/firestore";
 import { db } from './Firebase/Firebase';
 import { failMessage } from './Constants';
 
-const UpdateModal = ({ showUpdateModal, setshowUpdateModal }) => {
+const UpdateModal = ({ showUpdate, setshowUpdate, getData }) => {
     const [Load, setLoad] = useState(false);
     const [Input, setInput] = useState({
         title: "",
@@ -11,14 +11,15 @@ const UpdateModal = ({ showUpdateModal, setshowUpdateModal }) => {
         description: "",
         image: "",
     })
+
     useEffect(() => {
         setInput({
-            title: showUpdateModal.two.title,
-            year: showUpdateModal.two.year,
-            description: showUpdateModal.two.description,
-            image: showUpdateModal.two.image,
+            title: showUpdate?.title,
+            year: showUpdate?.year,
+            description: showUpdate?.description,
+            image: showUpdate?.image,
         })
-    }, [])
+    }, [showUpdate])
 
 
     const handleChange = (e) => {
@@ -27,22 +28,23 @@ const UpdateModal = ({ showUpdateModal, setshowUpdateModal }) => {
         setInput({ ...Input, [name]: value })
     }
 
-    const Update = async () => {
+    const Update = async (e) => {
+        e.preventDefault();
         if (Input.title == '' || Input.description == '' || Input.image == '' || Input.year == '') {
             return failMessage('Hmmm,Dont empty the fileds bro!', 'default')
         }
-        if (Input.title == showUpdateModal.two.title && Input.year == showUpdateModal.two.year && Input.description == showUpdateModal.two.description && Input.image == showUpdateModal.two.image) {
+        if (Input.title == showUpdate?.title && Input.year == showUpdate?.year && Input.description == showUpdate?.description && Input.image == showUpdate?.image) {
             return failMessage('There are no changes made to Update !', 'default')
         }
-        if(Input.year.length!=4){
+        if (Input.year.length != 4) {
             return failMessage('Enter a valid Year !', 'default')
         }
-        if(Input.description.length<100){
+        if (Input.description.length < 100) {
             return failMessage('Description is too short !', 'default')
         }
         try {
             setLoad(true);
-            const DocRef = doc(db, "Movies", showUpdateModal.two.id);
+            const DocRef = doc(db, "Movies", showUpdate?.id);
             await setDoc(DocRef, {
                 title: Input.title,
                 year: Input.year,
@@ -51,7 +53,8 @@ const UpdateModal = ({ showUpdateModal, setshowUpdateModal }) => {
             });
             setLoad(false)
             failMessage(`Succesfully Updated Movie ${Input.title} `, 'success')
-            setshowUpdateModal({ one: false, two: '' })
+            setshowUpdate('');
+            getData();
         } catch (error) {
             setLoad(false)
             failMessage(`Failed to Update Movie ${Input.title} `, 'info')
@@ -67,13 +70,13 @@ const UpdateModal = ({ showUpdateModal, setshowUpdateModal }) => {
                             <h3 className="text-lg font-semibold text-gray-900 ">
                                 Update Movie
                             </h3>
-                            <button onClick={() => setshowUpdateModal({ ...showUpdateModal, one: false })} type="button" className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center  " data-modal-toggle="crud-modal">
+                            <button onClick={() => setshowUpdate('')} type="button" className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center  " data-modal-toggle="crud-modal">
                                 <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                                     <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
                                 </svg>
                             </button>
                         </div>
-                        <div className="p-4 md:p-5">
+                        <form onSubmit={Update} className="p-4 md:p-5">
                             <div className="grid gap-4 mb-4 grid-cols-2">
                                 <div className="col-span-2">
                                     <label className="block mb-2 text-sm font-medium text-gray-900 ">Title</label>
@@ -93,7 +96,7 @@ const UpdateModal = ({ showUpdateModal, setshowUpdateModal }) => {
                                     <textarea value={Input.description} name="description" onChange={handleChange} id="description" rows="4" className="block p-2.5 w-full resize-none text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 " placeholder="Movie description "></textarea>
                                 </div>
                             </div>
-                            <button onClick={Update} type="submit" className="text-white  items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center  ">
+                            <button type="submit" className="text-white  items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center  ">
                                 {Load ?
                                     <span className=' flex justify-center'>
                                         <h1 className=' h-5 w-5 border-[3px] rounded-full border-blue-200 border-t-transparent animate-spin '></h1>
@@ -101,7 +104,7 @@ const UpdateModal = ({ showUpdateModal, setshowUpdateModal }) => {
                                     :
                                     'Update  Movie'}
                             </button>
-                        </div>
+                        </form>
                     </div>
                 </div>
             </div>

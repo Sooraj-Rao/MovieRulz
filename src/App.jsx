@@ -16,7 +16,6 @@ import ViewReview from './Components/ViewReview';
 
 function App() {
   const context = useContext(MovieContext);
-
   const { login, isAdmin,userData } = context;
 
   return (

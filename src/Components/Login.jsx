@@ -18,14 +18,15 @@ const Login = () => {
     password: ""
   })
 
-  const Validate = () => {
+  const Validate = (e) => {
+    e.preventDefault();
     if (Input.mobile.length != 10) {
       return failMessage('Invalid phone number!', 'info')
     }
     if (Input.password.length < 6) {
       return failMessage('Password is too short!', 'info')
     }
-
+    login();
   }
 
   const login = async () => {
@@ -63,7 +64,7 @@ const Login = () => {
   return (
     <section className="bg-slate-300">
       <div className=" container flex items-center justify-center  h-[calc(100vh-5rem)] px-6 mx-auto">
-        <div className="w-full max-w-md shadow-[0px_0px_10px_1px] shadow-slate-400  rounded-md p-4">
+        <form onSubmit={Validate} className="w-full max-w-md shadow-[0px_0px_10px_1px] shadow-slate-400  rounded-md p-4">
           <h1 className=" text-center text-2xl">Welcome back... Login Now </h1>
 
           <div className="relative flex items-center mt-6">
@@ -82,7 +83,7 @@ const Login = () => {
           </div>
 
           <div className="mt-6">
-            <button onClick={Validate} className="w-full px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50">
+            <button  className="w-full px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50">
               {
                 loading ?
                   <span className=' flex justify-center'>
@@ -98,7 +99,7 @@ const Login = () => {
               </Link>
             </div>
           </div>
-        </div>
+        </form>
       </div>
     </section>
   )

@@ -1,27 +1,27 @@
 import { doc, deleteDoc, getDocs } from "firebase/firestore";
 import { db, moviesRef } from "./Firebase/Firebase";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import ViewallAnim from "./Animate/ViewallAnim";
 import { failMessage } from "./Constants";
-import UpdateModal from "./UpdateModal";
 import AreYouSure from "./AreYouSure";
 import 'react-tooltip/dist/react-tooltip.css'
 import { Tooltip } from 'react-tooltip'
+import UpdateModal from './UpdateModal'
 import { DeleteSVG, UpdateSVG } from "./SVG/Svg";
+import { MovieContext } from "./Context/Context";
 
 const ViewAll = () => {
     const [data, setData] = useState([])
     const [load, setLoad] = useState(false)
     const [loader, setloader] = useState(false);
-    const [showUpdateModal, setshowUpdateModal] = useState({
-        one: false,
-        two: ''
-    })
+    const [showUpdate, setshowUpdate] = useState('')
     const [AreYou, setAreYou] = useState({
         one: false,
         item: '',
         confirm: false
     });
+
+    const { isAdmin } = useContext(MovieContext);
 
     const handleDelete = async (item) => {
         try {
@@ -55,20 +55,20 @@ const ViewAll = () => {
         }
     }
     useEffect(() => {
-        !AreYou.confirm && getData();
+        data.length == 0 && getData();
         AreYou.confirm && handleDelete(AreYou.item)
-    }, [showUpdateModal, AreYou.confirm])
+    }, [showUpdate, AreYou.confirm])
     return (
         <>
 
             {
-                showUpdateModal.one &&
-                <UpdateModal showUpdateModal={showUpdateModal} setshowUpdateModal={setshowUpdateModal} />
+                showUpdate &&
+                <UpdateModal getData={getData} showUpdate={showUpdate} setshowUpdate={setshowUpdate} />
             }
             {
-                AreYou.one && <AreYouSure AreYou={AreYou} setAreYou={setAreYou} />
+                AreYou.one && <AreYouSure isAdmin={isAdmin} AreYou={AreYou} setAreYou={setAreYou} />
             }
-            <div className={`relative overflow-x-auto shadow-md sm:rounded-lg ${showUpdateModal.one || AreYou.one ? ' blur-md  contrast-50' : 'blur-none'}`}>
+            <div className={`relative overflow-x-auto shadow-md sm:rounded-lg ${showUpdate || AreYou.one ? ' blur-md  contrast-50' : 'blur-none'}`}>
                 <table className="w-full text-sm text-left  text-gray-500 ">
                     {data && !load &&
                         <thead className="text-xs text-gray-700 uppercase bg-gray-50 ">
@@ -107,7 +107,7 @@ const ViewAll = () => {
                                         </td>
                                         <td className=" py-4  flex justify-center items-center h-64  ">
                                             <a data-tooltip-id="my-tooltip" data-tooltip-content="Update">
-                                                <span  onClick={() => setshowUpdateModal({ one: true, two: item })} >
+                                                <span onClick={() => setshowUpdate(item)} >
                                                     {UpdateSVG}
                                                 </span>
                                             </a>
@@ -120,10 +120,10 @@ const ViewAll = () => {
                                                         <span className=" h-6 w-6 border-2 border-black rounded-full border-t-transparent animate-spin"></span>
                                                     </div>
                                                     :
-                                                    <a className=" flex justify-center " data-tooltip-id="my-tooltip" data-tooltip-content="Delete">
-                                                        <span  onClick={() => setAreYou({ ...AreYou, one: true, item: item })}>
+                                                    <a className=" flex justify-center  " data-tooltip-id="my-tooltip" data-tooltip-content={`${isAdmin ? 'Delete' : 'Only Admin can delete'}`}>
+                                                        <button  onClick={() => setAreYou({ ...AreYou, one: true, item: item })}>
                                                             {DeleteSVG}
-                                                        </span>
+                                                        </button>
                                                     </a>
                                             }
                                         </td>
